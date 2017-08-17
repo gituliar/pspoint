@@ -3,14 +3,14 @@
 using namespace Vincia;
 
 void print_usage() {
-  cout << endl << "Usage:" << endl;
-  cout << "  pspoint <s> <in> <out> <n>" << endl;
-  cout << endl;
-  cout << "Arguments:" << endl;
-  cout << "  <s>    total energy" << endl;
-  cout << "  <in>   incoming particles count (1 or 2)" << endl;
-  cout << "  <out>  outgoing particles count" << endl;
-  cout << "  <n>    total points to generate" << endl;
+  cerr << endl << "Usage:" << endl;
+  cerr << "  pspoint <s> <in> <out> <n>" << endl;
+  cerr << endl;
+  cerr << "Arguments:" << endl;
+  cerr << "  <s>    total energy" << endl;
+  cerr << "  <in>   incoming particles count (1 or 2)" << endl;
+  cerr << "  <out>  outgoing particles count" << endl;
+  cerr << "  <n>    total points to generate" << endl;
 }
 
 int parse_args(int argc, char *argv[], double *s, int *in, int *out, int *n) {
