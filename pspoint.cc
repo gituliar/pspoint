@@ -9,7 +9,7 @@ void print_usage() {
   cerr << "Arguments:" << endl;
   cerr << "  <s>    total energy" << endl;
   cerr << "  <in>   incoming particles count (1 or 2)" << endl;
-  cerr << "  <out>  outgoing particles count" << endl;
+  cerr << "  <out>  outgoing particles count (up to 8)" << endl;
   cerr << "  <n>    total points to generate" << endl;
 }
 
@@ -34,23 +34,15 @@ int parse_args(int argc, char *argv[], double *s, int *in, int *out, int *n) {
     cerr << "ERROR: <in> should be positive" << endl;
     return -1;
   } else if (*in > 2) {
-    cerr << "ERROR: the case <in> should be 1 or 2" << endl;
-    return -1;
-  }
-  if (*in == 2) {
-    cerr << "ERROR: the case of 2 incoming particles is not implemented yet" << endl;
+    cerr << "ERROR: <in> should be 1 or 2" << endl;
     return -1;
   }
 
   *out = atoi(argv[3]);
-  if (*out <= 0) {
-    cerr << "ERROR: <out> should be positive" << endl;
+  if ((*out < 2) || (*out > 8)) {
+    cerr << "ERROR: <out> should be from 2 to 8" << endl;
     return -1;
   }
-  if (*in + *out > 9) {
-    cerr << "ERROR: <in> + <out> should be less than 10" << endl;
-    return -1;
-  } 
 
   *n = atoi(argv[4]);
   if (*n < 0) {
@@ -71,25 +63,25 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
+  double e = sqrt(s);
+  double p[4][8];
   Rambo  rambo;
   Rndm   rndmPtr;
-  double p[4][8];
-  
-  //Vec4 pi;
-  //RotBstMatrix rotbst;
   rambo.initPtr(&rndmPtr);
+
   printf("{\n");
   for (int j=1; j<=n; j++) {
     if (j>1) printf(",\n");
+    printf("  {\n");
     if (in == 1) {
-      printf("  {\n    q -> {%f, 0., 0., 0.},\n", s);
+      printf("    q -> {%10f, 0., 0., 0.},\n", e);
     } else {
+      printf("    p1 -> {%10f, 0., 0., %10f},\n", e/2,  e/2);
+      printf("    p2 -> {%10f, 0., 0., %10f},\n", e/2, -e/2);
     }
     rambo.genPoint(s, out, p);
     for (int i=0; i<out; i++) { 
-      if (i > 0) {
-        printf(",\n");
-      }
+      if (i > 0) printf(",\n");
       printf("    k%d -> {%.10f, %.10f, %.10f, %.10f}", i+1, p[0][i], p[1][i], p[2][i], p[3][i]);
     }
     printf("\n  }");
